@@ -25,4 +25,4 @@ jobs:
         env:
           SKIPPER_SPREADSHEET_ID: ${{ secrets.SKIPPER_SPREADSHEET_ID }}
           GOOGLE_CREDS_B64: ${{ secrets.GOOGLE_CREDS_B64 }}
-        run: go run ./cmd/doctor
+        run: go run .
