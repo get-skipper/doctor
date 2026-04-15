@@ -445,10 +445,9 @@ func checkWritePermission(ctx context.Context, svc *sheets.Service, spreadsheetI
 	req := &sheets.BatchUpdateSpreadsheetRequest{
 		Requests: []*sheets.Request{
 			{
-				AppendDimension: &sheets.AppendDimensionRequest{
-					SheetId:   0,
-					Dimension: "ROWS",
-					Length:    0, // append 0 rows — tests write permission without modifying sheet
+				UpdateSpreadsheetProperties: &sheets.UpdateSpreadsheetPropertiesRequest{
+					Properties: &sheets.SpreadsheetProperties{},
+					Fields:     "title", // dummy field that won't cause modification
 				},
 			},
 		},
