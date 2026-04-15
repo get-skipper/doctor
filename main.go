@@ -443,7 +443,15 @@ func checkDateFormats(vr *sheets.ValueRange, disabledUntilCol int) result {
 
 func checkWritePermission(ctx context.Context, svc *sheets.Service, spreadsheetID string) result {
 	req := &sheets.BatchUpdateSpreadsheetRequest{
-		Requests: []*sheets.Request{},
+		Requests: []*sheets.Request{
+			{
+				AppendDimension: &sheets.AppendDimensionRequest{
+					SheetId:   0,
+					Dimension: "ROWS",
+					Length:    0, // append 0 rows — tests write permission without modifying sheet
+				},
+			},
+		},
 	}
 	_, err := svc.Spreadsheets.BatchUpdate(spreadsheetID, req).
 		Context(ctx).
