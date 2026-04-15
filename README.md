@@ -63,17 +63,23 @@ Exit code is **0** if all checks pass, **1** if any warning or error is found.
 
 ## GitHub Actions
 
-Add a step to your CI workflow to validate the setup:
+Add a step to your CI workflow to validate the setup. Download the latest binary:
 
 ```yaml
+- name: Download Doctor
+  run: |
+    VERSION=$(curl -s https://api.github.com/repos/get-skipper/doctor/releases/latest | grep tag_name | cut -d'"' -f4)
+    curl -L https://github.com/get-skipper/doctor/releases/download/${VERSION}/doctor-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m) -o doctor
+    chmod +x doctor
+
 - name: Run Doctor
   env:
     SKIPPER_SPREADSHEET_ID: ${{ secrets.SKIPPER_SPREADSHEET_ID }}
     GOOGLE_CREDS_B64: ${{ secrets.GOOGLE_CREDS_B64 }}
-  run: go run .
+  run: ./doctor
 ```
 
-Store the following as GitHub secrets:
+Store as GitHub secrets:
 
 - `SKIPPER_SPREADSHEET_ID` — your Skipper spreadsheet ID
 - `GOOGLE_CREDS_B64` — service account JSON, base64-encoded (`cat sa.json | base64 | pbcopy`)
