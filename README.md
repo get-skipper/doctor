@@ -61,6 +61,25 @@ Exit code is **0** if all checks pass, **1** if any warning or error is found.
 | `SKIPPER_REFERENCE_SHEETS` | — | Comma-separated reference sheet names (optional) |
 | `NO_COLOR` | — | Disable colored output |
 
+## GitHub Actions
+
+Add a step to your CI workflow to validate the setup:
+
+```yaml
+- name: Run Doctor
+  env:
+    SKIPPER_SPREADSHEET_ID: ${{ secrets.SKIPPER_SPREADSHEET_ID }}
+    GOOGLE_CREDS_B64: ${{ secrets.GOOGLE_CREDS_B64 }}
+  run: go run .
+```
+
+Store the following as GitHub secrets:
+
+- `SKIPPER_SPREADSHEET_ID` — your Skipper spreadsheet ID
+- `GOOGLE_CREDS_B64` — service account JSON, base64-encoded (`cat sa.json | base64 | pbcopy`)
+
+The doctor exits with code **1** if any checks fail, failing the workflow. Fix warnings before enabling sync mode.
+
 ## License
 
 MIT
